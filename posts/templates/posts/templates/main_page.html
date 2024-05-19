@@ -1,0 +1,294 @@
+<!-- home.html -->
+{% extends 'posts/templates/navbase.html' %} {% block title %}Home{% endblock %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid mt-5 pt-5">
+  <div class="jumbotron jumbotron-fluid bg-light text-center py-5">
+      <div class="container">
+          <h1 class="display-4 text-danger fw-bold mb-4">Welcome to ComeUnite Bulletin Board!</h1>
+          <p class="lead">Discover events, services, and announcements in your local community.</p>
+          <hr class="my-4" />
+          {% comment %} <p>Start exploring and engaging with your community today.</p>
+          <a class="btn btn-primary btn-lg" href="#" role="button">Explore</a> {% endcomment %}
+      </div>
+  </div>
+
+  <br>
+
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card mb-4 shadow">
+        <div class="card-body">
+          <h2 class="card-title display-5 fw-bold text-danger text-center mb-4">
+            Platform Features
+          </h2>
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <h3 class="fw-bold text-primary">Community Member</h3>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">Post Event</li>
+                <li class="list-group-item">View Events</li>
+                <li class="list-group-item">RSVP to Events</li>
+                <li class="list-group-item">Participate in Discussions</li>
+                <li class="list-group-item">Like and Comment on Events</li>
+                <li class="list-group-item">Leave Feedback on Events</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <h3 class="fw-bold text-primary">Entity Manager/Business</h3>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  Create/Manage Business and Service Profiles
+                </li>
+                <li class="list-group-item">Post Announcements</li>
+                <li class="list-group-item">Manage Event Listings</li>
+                <li class="list-group-item">Promote Events/Services</li>
+                <li class="list-group-item">
+                  Display the Number of People Going to an Event
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <h3 class="fw-bold text-primary">Platform Administrator</h3>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  Manage User Roles and Permissions
+                </li>
+                <li class="list-group-item">Set Community Guidelines</li>
+                <li class="list-group-item">Moderate Content</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <h3 class="fw-bold text-primary">
+                Local Government or Associations
+              </h3>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">Post Official Announcements</li>
+                <li class="list-group-item">Ask for a Poll</li>
+                <li class="list-group-item">Engage with the Community</li>
+              </ul>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <h3 class="fw-bold text-primary">
+                Content Recommendation System/AI
+              </h3>
+              <p>
+                The AI system should analyze user preferences, behavior, and
+                past interactions to generate personalized content
+                recommendations.
+              </p>
+              <p>
+                Recommendations should be based on factors such as event
+                attendance history, likes, comments, and user profile
+                information.
+              </p>
+              <p>
+                The system should provide recommendations for events,
+                discussions, announcements, and other relevant content.
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <h3 class="fw-bold text-primary">Non-Functional Requirements</h3>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">Performance</li>
+                <li class="list-group-item">Usability</li>
+                <li class="list-group-item">Security</li>
+                <li class="list-group-item">Scalability</li>
+                <li class="list-group-item">Reliability</li>
+                <li class="list-group-item">Compliance</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card mb-4 shadow">
+        <div class="card-body">
+          <h2 class="card-title display-5 fw-bold text-danger text-center mb-4">
+            Project Overview
+          </h2>
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <h3 class="fw-bold text-primary">Problem and Solution</h3>
+              <p class="card-text">
+                Lack of a centralised platform for local community members to
+                share and discover events, services, and announcements is a
+                common problem. The Local Community Bulletin Board addresses
+                this by providing an online space for easy posting, finding, and
+                engaging with local information.
+              </p>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <h3 class="fw-bold text-primary">Project Description</h3>
+              <p class="card-text">
+                The Local Community Bulletin Board is an online platform
+                connecting residents within a local community. Key features
+                include a user-friendly interface, categorization of posts,
+                location-based filtering, community discussions, and comments
+                under posts.
+              </p>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <h3 class="fw-bold text-primary">Stakeholders</h3>
+              <p class="card-text">
+                Stakeholders include community members, local businesses and
+                service providers, community organizations, platform
+                administrators, and local government or associations.
+              </p>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <h3 class="fw-bold text-primary">Required Functionalities</h3>
+              <p class="card-text">
+                Functionalities for each stakeholder group are outlined,
+                including login/logout/register, AI/ML model integration,
+                role-based access control, visualization analytics, and specific
+                functionalities for community members, local businesses and
+                service providers, and community organizations.
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <h3 class="fw-bold text-primary">Backend Database</h3>
+              <p class="card-text">
+                A relational database like MySQL is recommended for storing user
+                data, posts, comments, and other application data. Database
+                schemas should be designed to ensure data integrity and
+                efficient storage.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-9">
+        <div class="card mb-4 shadow">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Feasibility Assessment</h2>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h3 class="fw-bold text-primary">Technical Feasibility</h3>
+                        <ol>
+                            <li>Database Management: Storing user data, posts, comments, etc., in a relational database like MySQL is feasible.</li>
+                            <li>Web Development: Developing a web-based platform with authentication and interactive features is feasible.</li>
+                            <li>AI/ML Integration: Integrating AI/ML models for content recommendation is feasible with expertise.</li>
+                            <li>Visualization Libraries: Using visualization libraries for charts and graphs is feasible and adds value.</li>
+                        </ol>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="fw-bold text-primary">Operational Feasibility</h3>
+                        <ol>
+                            <li>User Adoption: Good adoption rates expected if platform meets user needs.</li>
+                            <li>Maintenance and Support: Regular maintenance and support needed for platform stability.</li>
+                            <li>Economical Analysis: Budget and development costs need to be considered.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 class="fw-bold text-primary">Risk Assessment</h3>
+                        <ol>
+                            <li>Technical Risks: Integration challenges, scalability, data breaches, and spam/bots.</li>
+                            <li>Operational Risks: User engagement, platform stability, and downtime.</li>
+                        </ol>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="fw-bold text-primary">Project Work Plan</h3>
+                        <ol>
+                            <li>Project Initiation: Define objectives, roles, and stakeholder meetings.</li>
+                            <li>Planning Phase: Develop project plan, allocate resources, and conduct risk assessment.</li>
+                            <li>Design Phase: Design wireframes, prototypes, and finalize designs.</li>
+                            <li>Development Phase: Implement front-end, back-end, and AI/ML integration.</li>
+                            <li>Testing Phase: Conduct unit, integration, and user acceptance testing.</li>
+                            <li>Deployment Phase: Prepare for deployment, migrate data, and deploy to production.</li>
+                            <li>Post-Deployment Phase: Monitor performance, address issues, and collect feedback.</li>
+                            <li>Maintenance and Support: Provide ongoing maintenance, support, and optimization.</li>
+                            <li>Evaluation and Reflection: Conduct post-project review, gather feedback, and document outcomes.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% comment %} <div class="row justify-content-center">
+    <div class="col-md-12">
+        <div class="card-deck">
+            <!-- Feasibility Assessment Cards -->
+            <!-- ERD Diagram Card -->
+            <div class="card mb-4 shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">ERD Diagram</h3>
+                    <div class="text-center">
+                        <img src="{% static 'img/ERD1.jpeg' %}" class="img-fluid" alt="ERD Diagram">
+                        <img src="{% static 'img/ERD2.jpeg' %}" class="img-fluid" alt="ERD Diagram">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <div class="card-deck">
+            <!-- Feasibility Assessment Cards -->
+            <!-- ERD Diagram Card -->
+            <div class="card mb-4 shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Giant Chart</h3>
+                    <div class="text-center">
+                        <img src="{% static 'img/GT1.jpeg' %}" class="img-fluid" alt="Giant Chart">
+                        <img src="{% static 'img/GT2.jpeg' %}" class="img-fluid" alt="Giant Chart">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <div class="card-deck">
+            <!-- Feasibility Assessment Cards -->
+            <!-- ERD Diagram Card -->
+            <div class="card mb-4 shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Use Case Document</h3>
+                    <div class="text-center">
+                <a href="path/to/your/usecase/document.pdf" target="_blank" rel="noopener noreferrer">
+                            <img src="{% static 'img/UC.jpeg' %}" class="img-fluid" alt="Use Case Document">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ {% endcomment %}
+
+
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Comeunite Signup{% endblock title %}
+
+{% block content %}
+    {% if error_message %}
+        <p class="text-danger text-center">{{ error_message }}</p>
+    {% endif %}
+
+    <div class="pic">
+        <div class="container login-container mx-auto py-3 w-50 h-100 shadow pt-5 py-3 bg-white rounded">
+            <div class="text-center">
+                <a href="{% url 'profile' %}">
+                    <img src="{% static 'img/logo-short.png' %}" alt="logo" class="img-fluid mb-2" width="100px">
+                </a>
+            </div>
+
+            <div class="text-center w-50 mx-auto">
+                <div class="h-100 overflow-auto">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <!-- Display form field errors here -->
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                            {% endfor %}
+                        {% endfor %}
+
+                        <div class="form-group">
+                            <input type="text" class="form-control my-2" name="username" placeholder="Username" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control my-2" name="first_name" placeholder="First Name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control my-2" name="last_name" placeholder="Last Name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="number" class="form-control my-2" name="age" placeholder="Age" required>
+                        </div>
+
+                        <div class="form-group">
+                            <select class="form-select my-2" name="gender" id="gender" required>
+                                <option value="" selected disabled>Select your gender</option>
+                                <option value="Male" {% if user.gender == 'Male' %}selected{% endif %}>Male</option>
+                                <option value="Female" {% if user.gender == 'Female' %}selected{% endif %}>Female</option>
+                                <option value="Other" {% if user.gender == 'Other' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <select class="form-select my-2" name="designation" id="designation" required>
+                                <option value="" selected disabled>Select your designation</option>
+                                <option value="individual" {% if user.designation == 'individual' %}selected{% endif %}>Individual</option>
+                                <option value="business" {% if user.designation == 'business' %}selected{% endif %}>Business</option>
+                                <option value="local_government" {% if user.designation == 'local_government' %}selected{% endif %}>Local Government</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control my-2" name="email" placeholder="Email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="password" class="form-control my-2" name="password1" placeholder="Password" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="password" class="form-control my-2" name="password2" placeholder="Confirm Password" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="image" class="form-control w-100 label mx-0 px-2 my-2">
+                                Profile Picture
+                                <input type="file" name="profilePicture" class="form-control w-100 my-2 border-0" id="image" accept="image/*" required>
+                            </label>
+                        </div>
+
+                        <input type="submit" class="btn btn-primary btn-block my-2 w-100" value="Sign Up">
+
+                        <p class="text-center mt-4 mb-5">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

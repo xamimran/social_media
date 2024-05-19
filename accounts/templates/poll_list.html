@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}
+    All Polls
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="mt-5 pt-5 col-md-8 mx-auto">
+      <h1 class="my-4 fw-bold text-bg-danger text-white p-2 mx-auto text-center">All Polls</h1>
+      <div class="row">
+        {% if polls %}
+          {% for poll in polls %}
+            <div class="col-lg-6 mb-4" style="opacity: {% if poll.done %}0.5{% endif %}; pointer-events: {% if poll.done %}none{% endif %}">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h4 class="card-title text-danger">{{ poll.question }}</h4>
+                  <ul class="list-group list-group-flush">
+                    {% for option in poll.options.all %}
+                      <li class="list-group-item">
+                        <form action="{% url 'vote' poll.id %}" method="post">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-primary option-btn" name="option_id" value="{{ option.id }}" {% if option.voted_by_user %}disabled{% endif %}
+                            style="{% if option.id in user_options  %} background-color: #5cb85c !important; {% endif %}">
+                            
+                            {{ option.option_text }}: <span class='text-danger fw-bold'> {{ option.vote_set.count }} </span> 
+                          </button>
+                        </form>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>No polls available.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .option-btn {
+    width: 100%;
+    margin-bottom: 5px;
+    color: #ffffff;
+    background-color: #286090; /* Default button color */
+  }
+
+  .option-btn:hover {
+    background-color: #5cb85c; /* Hover color */
+  }
+
+  .option-btn:disabled {
+    cursor: not-allowed;
+    background-color: #6c757d; /* Disabled button color */
+  }
+
+  .selected {
+    background-color: #5cb85c !important;
+  }
+</style>
+{% endblock %}

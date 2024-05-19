@@ -1,0 +1,255 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="mt-5 pt-5 col-md-12">
+      <div id="content" class="content content-full-width">
+        <div class="profile">
+          <div class="profile-header">
+            <div class="profile-header-cover"></div>
+            <div class="profile-header-content">
+              <div class="profile-header-img">
+                {% if target_user.profilePicture %}
+                <img
+                  src="{{ target_user.profilePicture.url }}"
+                  alt="Profile Picture"
+                />
+                {% endif %}
+              </div>
+              <div class="profile-header-info">
+                <h4 class="m-t-10 m-b-5">{{ target_user.target_username }}</h4>
+                <p class="m-b-10">Name: {{ target_user.first_name }}</p>
+                <p class="m-b-10">Age: {{ target_user.age }}</p>
+                <p class="m-b-10">Gender: {{ target_user.gender }}</p>
+                <p class="m-b-10">Email: {{ target_user.email }}</p>
+              </div>
+            </div>
+            <ul class="profile-header-tab nav nav-tabs"></ul>
+          </div>
+
+          {% comment %}
+          <!-- Navigation Tabs -->
+          <nav>
+            <div class="nav nav-tabs mt-3 mx-2" id="nav-tab" role="tablist">
+              <button
+                class="nav-link active text-danger fw-bold"
+                id="nav-topics-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#nav-topics"
+                type="button"
+                role="tab"
+                aria-controls="nav-topics"
+                aria-selected="true"
+              >
+                Events
+              </button>
+              <button
+                class="nav-link text-danger fw-bold"
+                id="nav-questions-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#nav-questions"
+                type="button"
+                role="tab"
+                aria-controls="nav-questions"
+                aria-selected="false"
+              >
+                Posts
+              </button>
+              <button
+                class="nav-link text-danger fw-bold"
+                id="nav-answers-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#nav-answers"
+                type="button"
+                role="tab"
+                aria-controls="nav-answers"
+                aria-selected="false"
+              >
+                Comments
+              </button>
+            </div>
+          </nav>
+
+          <div class="tab-content" id="nav-tabContent">
+            <div
+              class="tab-pane fade show active"
+              id="nav-topics"
+              role="tabpanel"
+              aria-labelledby="nav-topics-tab"
+            >
+              <!-- Topics Section -->
+              <div
+                class="shadow p-3 mb-3 bg-white rounded border-danger border-3 border border-bottom-0 border-top-0 border-end-0"
+              >
+                <h3 class="text-danger fw-bold border-1 border-bottom pb-3">
+                  Events Followed By {{target_user.first_name}}
+                </h3>
+                <div class="row mt-3 pt-1">
+                  <div class="">
+                    {% for topic in topics %}
+                    <a href="{% url 'topic_page' topic.id %}">
+                      <span
+                        class="btn-outline-danger btn btn-sm p-2 fw-bold bold m-1 rounded-1"
+                        >{{ topic.name }}</span
+                      >
+                    </a>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="nav-questions"
+              role="tabpanel"
+              aria-labelledby="nav-questions-tab"
+            >
+              <!-- Question Section -->
+              <div
+                class="question-section shadow p-4 mb-3 bg-white rounded border-danger border-3 border border-bottom-0 border-top-0 border-end-0"
+              >
+                <h3 class="text-danger fw-bold">
+                  Posts Asked By {{target_user.first_name}}
+                </h3>
+                {% for question in questions %}
+                <div class="question mb-4 pt-5 border-top border-1">
+                  <h4 class="fw-bold">{{ question.title }}</h4>
+                  <p class="mb-2">{{ question.description }}</p>
+                  <div class="">
+                    <a
+                      href="#"
+                      class="btn btn-outline-danger"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#answerForm{{ question.id }}"
+                      >Comment this Post</a
+                    >
+
+                    <!-- Answer form -->
+                    <div class="collapse mt-3" id="answerForm{{ question.id }}">
+                      <form
+                        action="{% url 'answer_question' question.id %}"
+                        method="post"
+                      >
+                        {% csrf_token %}
+                        <div class="mb-3">
+                          <label for="answerInput " class="form-label fw-bold"
+                            >Your Comment</label
+                          >
+                          <textarea
+                            class="form-control"
+                            id="answerInput"
+                            name="answer"
+                            rows="3"
+                            required
+                          ></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-danger">
+                          Submit Comment
+                        </button>
+                      </form>
+                    </div>
+
+                    %}
+                    <div class="d-flex align-items-center py-2 my-3">
+                      <!-- Like button -->
+                      <form
+                        action="{% url 'like_question' question.id %}"
+                        method="post"
+                      >
+                        {% csrf_token %}
+                        <button type="submit" class="btn p-0 m-0">
+                          <span class="p-0 m-0 fw-bold fs-6 text-success p-1"
+                            >{{ question.likes }}</span
+                          >
+                          <i
+                            class="p-0 m-0 text-success fa-solid fa-thumbs-up"
+                          ></i>
+                        </button>
+                      </form>
+                      <!-- Dislike button -->
+                      <form
+                        action="{% url 'dislike_question' question.id %}"
+                        method="post"
+                      >
+                        {% csrf_token %}
+                        <button type="submit" class="ms-3 btn p-0 m-0">
+                          <span class="p-0 m-0 fw-bold fs-6 text-danger p-1"
+                            >{{ question.dislikes }}</span
+                          >
+                          <i
+                            class="p-0 m-0 text-danger fa-solid fa-thumbs-down"
+                          ></i>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="nav-answers"
+              role="tabpanel"
+              aria-labelledby="nav-answers-tab"
+            >
+              <!-- Answer Section -->
+              <div
+                class="answer-section shadow p-4 mb-3 bg-white rounded border-danger border-3 border border-bottom-0 border-top-0 border-end-0"
+              >
+                <h3 class="text-danger fw-bold">
+                  Comments By {{target_user.first_name}}
+                </h3>
+                {% for answer in answers %}
+                <div class="answer mb-4 border-top border-1 pt-5">
+                  <p class="mb-2 fw-bold">{{ answer.description }}</p>
+                  <!-- Related Questions -->
+                  <a href="{% url 'question_page' answer.question.id %}">
+                    <span
+                      class="btn-outline-danger btn btn-sm p-2 fw-bold bold rounded-1"
+                    >
+                      P: {{ answer.question.title }}</span
+                    >
+                  </a>
+                </div>
+
+                <div class="d-flex align-items-center py-2 my-3">
+                  <!-- Like button -->
+                  <form
+                    action="{% url 'like_answer' answer.id %}"
+                    method="post"
+                  >
+                    {% csrf_token %}
+                    <button type="submit" class="btn p-0 m-0">
+                      <span class="p-0 m-0 fw-bold fs-6 text-success p-1"
+                        >{{ answer.likes }}</span
+                      >
+                      <i class="p-0 m-0 text-success fa-solid fa-thumbs-up"></i>
+                    </button>
+                  </form>
+                  <!-- Dislike button -->
+                  <form
+                    action="{% url 'dislike_answer' answer.id %}"
+                    method="post"
+                  >
+                    {% csrf_token %}
+                    <button type="submit" class="ms-3 btn p-0 m-0">
+                      <span class="p-0 m-0 fw-bold fs-6 text-danger p-1"
+                        >{{ answer.dislikes }}</span
+                      >
+                      <i
+                        class="p-0 m-0 text-danger fa-solid fa-thumbs-down"
+                      ></i>
+                    </button>
+                  </form>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endcomment %}
+  </div>
+</div>
+{% endblock %}

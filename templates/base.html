@@ -1,0 +1,224 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="{% static 'img/logo.png' %}"/>
+    <title>
+        {% block title %}
+            Comeunite
+        {% endblock title %}
+    </title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- Chatbot Widget Style -->
+    {% comment %} <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .chat-header {
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #dc3545; /* Danger color */
+            color: #fff;
+        }
+        .chat-body {
+            background-color: #f8d7da; /* Danger color */
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            word-wrap: break-word;
+            margin-bottom: 10px;
+            max-width: 70%;
+        }
+        .user {
+            text-align: right;
+            margin-left: auto;
+            background-color: #e60000; /* Danger color */
+            color: #fff;
+        }
+        .ai {
+            text-align: left;
+            margin-right: auto;
+            background-color: #f2f2f2;
+        }
+        .chat-input {
+            width: calc(100% - 90px);
+            margin-right: 10px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border: 1px solid #ced4da;
+            padding: 8px;
+        }
+        .btn-danger {
+            background-color: #dc3545; /* Danger color */
+            border-color: #dc3545; /* Danger color */
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            color: #fff;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        .btn-danger:hover {
+            background-color: #bd2130; /* Darker shade of danger color */
+            border-color: #bd2130; /* Darker shade of danger color */
+        }
+        .chat-toggle-btn {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .chat-toggle-btn:hover {
+            color: #f8d7da; /* Danger color */
+        }
+    </style> {% endcomment %}
+</head>
+<body>
+    <!-- Navbar -->
+    {% if '/password_change/' not in request.path and  '/password_reset/' not in request.path and  '/reset/' not in request.path and '/login/' not in request.path and '/signup/' not in request.path %}
+        {% include 'navbar.html' %}
+    {% endif %} 
+
+    <!-- Main Content -->
+    {% block content %}
+    {% endblock content %}
+
+    <!-- Chatbot Widget -->
+    {% comment %} <div id="chat-widget" class="chat-widget">
+        <div id="chat-header" class="chat-header" onclick="toggleChat()">
+            Chat with AI
+            <button id="chat-toggle-btn" class="chat-toggle-btn">-</button>
+        </div>
+        <div id="chat-body" class="chat-body">
+            <div id="chat-container" class="chat-container">
+                <!-- Messages will be appended here -->
+            </div>
+            <form id="chat-form" class="chat-form">
+                <div class="input-group">
+                    <input type="text" id="user-input" class="chat-input" autocomplete="off" placeholder="Type your message..." required />
+                    <button type="button" id="send-btn" class="btn btn-danger">Send</button>
+                </div>
+            </form>
+        </div>
+    </div> {% endcomment %}
+
+    <!-- Bootstrap JS and dependencies (popper.js, jQuery) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Chatbot Widget Script -->
+    {% comment %} <script>
+        function toggleChat() {
+            var chatBody = document.getElementById('chat-body');
+            var chatToggleBtn = document.getElementById('chat-toggle-btn');
+
+            if (chatBody.style.display === 'block') {
+                chatBody.style.display = 'none';
+                chatToggleBtn.innerText = '+';
+                document.getElementById('chat-widget').style.width = '150px'; // Narrower width when closed
+            } else {
+                chatBody.style.display = 'block';
+                chatToggleBtn.innerText = '-';
+                scrollToBottom();
+                document.getElementById('chat-widget').style.width = '400px'; // Default width when opened
+            }
+        }
+
+        function scrollToBottom() {
+            var chatContainer = document.getElementById('chat-container');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        window.onload = function() {
+            // Initialize event listeners
+            document.getElementById('send-btn').addEventListener('click', sendMessage);
+            document.getElementById('user-input').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            scrollToBottom();
+        };
+
+        function sendMessage() {
+            var userInput = document.getElementById('user-input').value.trim();
+            if (userInput === '') {
+                return;
+            }
+        
+            var userMessage = '<div class="message user">' + userInput + '</div>';
+        
+            // Append user message to the chat container
+            document.getElementById('chat-container').innerHTML += userMessage;
+        
+            // Clear user input
+            document.getElementById('user-input').value = '';
+        
+            // Prepare the messages array
+            var messages = [
+                {
+                    role: 'system',
+                    content: 'You are a helpful assistant.'
+                },
+                {
+                    role: 'user',
+                    content: userInput
+                }
+            ];
+        
+            // Call the OpenAI API to get AI response
+            fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer place_key_here' // Replace YOUR_API_KEY with your actual API key
+                },
+                body: JSON.stringify({
+                    model: 'gpt-3.5-turbo',
+                    messages: messages
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                data.choices.forEach(choice => {
+                    var aiMessage = '<div class="message ai">' + choice.message.content + '</div>';
+                    // Append AI response to the chat container for AI messages
+                    document.getElementById('ai-messages-container').innerHTML += aiMessage;
+                });
+                scrollToBottom();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script> {% endcomment %}
+</body>
+</html>

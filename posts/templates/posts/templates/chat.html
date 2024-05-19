@@ -1,0 +1,162 @@
+{% comment %} {% extends "base.html" %}
+
+{% block title %}
+    Chat with AI
+{% endblock %}
+
+{% block content %} {% endcomment %}
+<!-- Chatbot Widget -->
+<div id="chat-widget" class="chat-widget" style="position: fixed; bottom: 20px; right: 20px; width: 400px;">
+    <div id="chat-header" class="chat-header bg-danger text-white" onclick="toggleChat()">
+        Chat with AI
+        <button id="chat-toggle-btn" class="chat-toggle-btn">-</button>
+    </div>
+    <div id="chat-body" class="chat-body" style="display: block;">
+        <div id="chat-container" class="chat-container">
+            {% for message in conversation %}
+            {% if 'User:' in message %}
+            <div class="message user text-right">
+                <div class="message-content-user">{{ message|slice:"6:" }}</div>
+            </div>
+            {% else %}
+            <div class="message ai text-left">
+                <div class="message-content-ai">{{ message|slice:"3:" }}</div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <form action="" method="post" id="chat-form" class="chat-form">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="text" name="user_input" id="user-input" class="chat-input form-control" autocomplete="off" placeholder="Type your message..." />
+                <button type="submit" class="btn btn-danger">Send</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Chatbot Widget Style -->
+<style>
+    .chat-widget {
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .chat-header {
+        padding: 10px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .chat-body {
+        background-color: #f8d7da; /* Danger color */
+        padding: 10px;
+    }
+
+    .chat-container {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .message {
+        padding: 10px;
+        border-radius: 5px;
+        display: block;
+        word-wrap: break-word;
+        max-width: 70%;
+    }
+
+    .user {
+        text-align: right;
+        margin-left: auto;
+        color: #ffffff; /* White color */
+    }
+
+    .ai {
+        text-align: left;
+        margin-right: auto;
+    }
+
+    .chat-input {
+        width: calc(100% - 90px);
+        margin-right: 10px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .btn-danger {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    .btn-danger:hover {
+        background-color: #bd2130; /* Darker shade of danger color */
+        border-color: #bd2130; /* Darker shade of danger color */
+    }
+
+    .chat-toggle-btn {
+        background-color: transparent;
+        border: none;
+        color: #ffffff; /* White color */
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .chat-toggle-btn:hover {
+        color: #f8d7da; /* Danger color */
+    }
+
+    .input-group {
+        margin-bottom: 10px;
+    }
+
+    .message-content-user {
+        display: inline-block;
+        background-color: #e60000; /* Danger color */
+        padding: 8px 12px;
+        border-radius: 10px;
+        margin-bottom: 1px;
+    }
+
+    .message-content-ai {
+        display: inline-block;
+        background-color: #f2f2f2;
+        padding: 8px 12px;
+        border-radius: 10px;
+        margin-bottom: 1px;
+    }
+
+</style>
+
+<!-- Chatbot Widget Script -->
+<script>
+    function toggleChat() {
+        var chatBody = document.getElementById('chat-body');
+        var chatToggleBtn = document.getElementById('chat-toggle-btn');
+
+        if (chatBody.style.display === 'block') {
+            chatBody.style.display = 'none';
+            chatToggleBtn.innerText = '+';
+            document.getElementById('chat-widget').style.width = '150px'; // Narrower width when closed
+        } else {
+            chatBody.style.display = 'block';
+            chatToggleBtn.innerText = '-';
+            scrollToBottom();
+            document.getElementById('chat-widget').style.width = '400px'; // Default width when opened
+        }
+    }
+
+    function scrollToBottom() {
+        var chatContainer = document.getElementById('chat-container');
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    window.onload = function() {
+        scrollToBottom();
+    };
+</script>
+{% comment %} {% endblock %} {% endcomment %}

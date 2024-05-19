@@ -1,0 +1,73 @@
+{% extends "base.html" %} {% load static %} {% block title %}Comeunite Login{%endblock title %} {% block content %} {% if error_message %}
+<p class="text-danger text-center">{{ error_message }}</p>
+{% endif %}
+
+<div class="pic">
+  <div
+    class="container login-container mx-auto py-3 w-50 h-75 shadow pt-5 py-3 bg-white rounded"
+  >
+    <div class="text-center">
+      <a href="{% url 'profile' %}"
+        ><img
+          src="{% static 'img/logo-short.png' %}"
+          alt="logo"
+          class="img-fluid my-5"
+          width="100px"
+      /></a>
+    </div>
+
+    <div class="text-center w-50 mx-auto pb-5 mt-5">
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group my-3">
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            placeholder="Username"
+            required
+          />
+        </div>
+
+        <div class="form-group my-3">
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+
+        {% if form.errors %}
+        <p class="text-danger">
+          Your username and password didn't match. Please try again.
+        </p>
+        {% endif %}
+
+        <div class="form-group my-3">
+          <button type="submit" class="w-100 btn btn-primary btn-block">
+            Login
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="text-center mt-3">
+      <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+    </div>
+
+    <div class="text-center mt-3">
+      <p>
+        Forgot your password?
+        <a href="{% url 'password_reset' %}">Reset password</a>
+      </p>
+    </div>
+
+    <div class="text-center mt-3">
+      <p>Wanna see files? <a href="{% url 'main_page' %}">Files</a></p>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

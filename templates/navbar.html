@@ -1,0 +1,60 @@
+{% load static %}
+<!-- Nav Row -->
+<div class="mynavclass row mx-auto col-12 p-0 bg-white position-fixed shadow">
+    <nav class="mynavclass col-12 navbar navbar-expand-lg navbar-light d-flex justify-content-center py-2 px-3">
+
+        <div class="p-0 m-0 col-2">  
+        <img src="{% static 'img/logo.png'%}" width="15%" class="p-0 m-0" alt="logo">
+        </div>
+
+        <button class="btn btn-sm btn-light text-primary my-2 my-sm-0 d-lg-inline-block fw-bold py-2 px-2 d-inline-block d-lg-none d-xl-none " type="submit">Login</button>
+
+        <button class="border-0 p-0 m-0 navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon fa-solid fa-bars-staggered text-light"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        
+            <ul class="navbar-nav mx-auto mt-2 mt-lg-0 mx-auto d-flex">
+                <li class="nav-item active">
+                <a class="nav-link text-danger fw-bold px-4" href="{% url 'home'%}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                {% comment %} <li class="nav-item">
+                <a class="nav-link text-danger fw-bold px-4" href="{% url 'add_question_form'%}">Posts</span></a>
+                </li> {% endcomment %}
+                <li class="nav-item">
+                <a class="nav-link text-danger fw-bold px-4" href="{% url 'add_topic'%}">Events</span></a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link text-danger fw-bold px-4" href="{% url 'poll_list'%}">Polls</span></a>
+                </li>
+                {% comment %} <li class="nav-item">
+                <a class="nav-link text-danger fw-bold px-4" href="{% url 'upload_and_show_files'%}">Files</span></a>
+                </li> {% endcomment %}
+            </ul>
+
+            <div class="d-flex justify-content-between">
+            {% if user.is_authenticated %}
+            
+            <!-- small photo -->
+            <a href="{% url 'profile' %}">
+                <div class="d-flex justify-content-center align-items-center ">
+                    <img src="{{user.profilePicture.url}}" width="30px" class="rounded-circle" alt="user">
+                    <a href="{% url 'profile' %}" class="text-danger fw-bold px-2">{{user.first_name}}
+                </div>
+            </a>
+                
+            
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+            
+            {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-primary m-1">Login</a>
+                    <a href="{% url 'signup' %}" class="btn btn-success m-1">Signup</a>
+                    {% endif %}        
+            </div>
+        </div>
+    </nav>
+</div>

@@ -1,0 +1,372 @@
+{% extends "base.html" %}
+
+{% block title %}Add Topic{% endblock %}
+
+{% block content %}
+
+<!-- Followed Post Section -->
+<div class="container w-75 pt-5">
+    <h2 class="mb-5"></h2>
+
+    <!-- Add a New Event -->
+    <div class="card mb-3 border-0">
+        <!-- Add a New Event Button -->
+        <button class="btn btn-danger fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#addTopicForm" aria-expanded="false" aria-controls="addTopicForm">
+            Add a new Event
+        </button>
+
+        <!-- Add a New Event Form (Collapsed by Default) -->
+        <div class="collapse card mb-3 border-0" id="addTopicForm">
+            <div class="card-body mx-auto w-50">
+                <h5 class="card-title py-2 m-0 p-0 text-danger">Add a New Event</h5>
+                <form action="{% url 'add_topic' %}" method="post" class="mt-3 form-floating mx-auto" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="questionTitleInput" name="name" placeholder="Title" required>
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" id="questionDescriptionInput" name="description" placeholder="Description" rows="3" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="date" class="form-control" id="questionTitleInput" name="topic_date" placeholder="Date" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="questionTitleInput" name="address" placeholder="Address" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image" class="form-control w-100 label mx-0 px-2 my-2">
+                            Event Image
+                            <input type="file" name="topic_picture" class="form-control w-100 my-2 border-0" id="image" accept="image/*" required>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger">Submit Event</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+
+    <div class="card-body bg-white p-2">
+        <!-- Filter Dropdown -->
+        <select id="designationFilter" class="form-select mb-3 bg-danger w-25 mx-auto text-light" onchange="filterTopics()">
+            <option value="all" selected>All</option>
+            <option value="business">Business</option>
+            <option value="local_government">Local Government</option>
+            <option value="individual_or_non">Individual or Non</option>
+        </select>
+        
+        <h5 class="card-title py-2 m-0 p-0 text-danger">List of Events:</h5>
+        <ul class="list-group list-group">
+            {% for topic in topics %}
+                <li class="list-group-item my-2 p-2 border-top d-flex align-items-center topic-item" data-designation="{{ topic.author.designation }}">
+                    <img src="{{ topic.topic_picture.url }}" alt="{{ topic.name }}" width="30" height="30" class="me-2 rounded-circle">
+                    <a href="{% url 'topic_page' topic.id %}" class="text-black fw-bold">
+                        {% comment %} {{ topic.name|slice:":15" }} {% endcomment %}
+                        {% if topic.name|length > 15 %}
+                            {{ topic.name|slice:":15" }}...
+                        {% else %}
+                            {{ topic.name }}
+                        {% endif %}
+                    </a>
+                    <a href="{% url 'topic_page' topic.id %}" class="btn btn-outline-danger ms-auto">View</a>
+                    <!-- Follow/Unfollow Event Button -->
+                    {% if user.is_authenticated %}
+                        {% if user in topic.followed_by.all %}
+                            <form action="{% url 'topic_unfollow' topic.id %}" method="get" class="ms-2">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger">Cancel RSVP</button>
+                            </form>
+                        {% else %}
+                            <form action="{% url 'topic_follow' topic.id %}" method="get" class="ms-2">
+                                {% csrf_token %}
+                                <button type="submit" class=" px-4 btn btn-outline-success">RSVP</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+</div>
+
+</div>
+
+<script>
+    function filterTopics() {
+        var designation = document.getElementById('designationFilter').value;
+        var topics = document.getElementsByClassName('topic-item');
+
+        for (var i = 0; i < topics.length; i++) {
+            var topicDesignation = topics[i].getAttribute('data-designation');
+            if (designation === 'all') {
+                topics[i].style.setProperty('display', 'flex', 'important');
+            } else if (topicDesignation === designation) {
+                topics[i].style.setProperty('display', 'flex', 'important');
+            } else {
+                topics[i].style.setProperty('display', 'none', 'important');
+            }
+        }
+    }
+ 
+</script>
+
+
+
+<div class="container w-75 pt-3">
+    <!-- Bar Chart for Age Groups -->
+    <div class="card mb-3">
+        <div class="card-header">
+            Users Age Group Distribution (Bar Chart)
+        </div>
+        <div class="card-body">
+            <canvas id="userAgeGroupBarChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+    <!-- Pie Chart for Topic Distribution -->
+    <div class="card mb-3">
+        <div class="card-header">
+            Users Distribution Among Events (Pie Chart)
+        </div>
+        <div class="card-body">
+            <canvas id="userTopicPieChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+    {% comment %} <!-- Line Chart for Admin Status Over Time -->
+    <div class="card mb-3">
+        <div class="card-header">
+            Admin Status Over Time (Line Chart)
+        </div>
+        <div class="card-body">
+            <canvas id="adminStatusLineChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+    <!-- Radar Chart for User Interests -->
+    <div class="card mb-3">
+        <div class="card-header">
+            User Interests (Radar Chart)
+        </div>
+        <div class="card-body">
+            <canvas id="userInterestsRadarChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+</div> {% endcomment %}
+<script>
+    // Bar Chart Data for Age Groups
+    var ctxAgeGroupBar = document.getElementById('userAgeGroupBarChart').getContext('2d');
+    var userAgeGroupBarChart = new Chart(ctxAgeGroupBar, {
+        type: 'bar',
+        data: {
+            labels: ['Teen', 'Young', 'Old'],
+            datasets: [{
+                label: 'Users Age Group Distribution',
+                data: [{{ teen_users }}, {{ young_users }}, {{ old_users }}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                ],
+                borderWidth: 1
+            }, {
+                label: 'Default Data',
+                data: [25, 40, 30], // Default data
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+// Pie Chart Data for Topic Distribution
+var ctxTopicPie = document.getElementById('userTopicPieChart').getContext('2d');
+var userTopicPieChart = new Chart(ctxTopicPie, {
+    type: 'pie',
+    data: {
+        labels: [{% for topic, user_count in topic_user_distribution %}
+                    "{{ topic }}",
+                {% endfor %}],
+        datasets: [{
+            label: 'Users Distribution Among Topics',
+            data: [{% for topic, user_count in topic_user_distribution %}
+                        {{ user_count }},
+                    {% endfor %}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+            ],
+            borderWidth: 1
+        }, {
+            label: 'Default Data',
+            data: [30, 20, 10, 15], // Default data
+            backgroundColor: [
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 159, 64, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 205, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+    // Line Chart Data for Admin Status Over Time (Default Data)
+    var ctxAdminStatusLine = document.getElementById('adminStatusLineChart').getContext('2d');
+    var adminStatusLineChart = new Chart(ctxAdminStatusLine, {
+        type: 'line',
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            datasets: [{
+                label: 'Admin Status Over Time',
+                data: [3, 7, 10, 8, 5, 12, 9], // Default data for demonstration
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }, {
+                label: 'Default Data',
+                data: [5, 8, 12, 10, 6, 9, 11], // Default data
+                fill: false,
+                borderColor: 'rgb(255, 99, 132)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Radar Chart Data for User Interests (Default Data)
+    var ctxUserInterestsRadar = document.getElementById('userInterestsRadarChart').getContext('2d');
+    var userInterestsRadarChart = new Chart(ctxUserInterestsRadar, {
+        type: 'radar',
+        data: {
+            labels: ['Sports', 'Technology', 'Travel', 'Food', 'Fashion', 'Art'],
+            datasets: [{
+                label: 'User Interests',
+                data: [7, 5, 8, 6, 4, 9], // Default data for demonstration
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }, {
+                label: 'Default Data',
+                data: [6, 8, 7, 5, 6, 7], // Default data
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                r: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+<!-- Add a container for the map -->
+<div id="map-container" class="mt-5">
+    <style>
+        /* Style for the map container */
+        #map-container {
+            width: 100%;
+            height: 600px; /* Adjust the height as needed */
+            position: relative;
+        }
+
+        /* Style for the map */
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+    <div id="map" class="w-75 mb-5 pb-5 border-5 border mx-auto"></div> <!-- Div to display the map -->
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZpNFzEDgmC_CWe333o8KrHeHq0tEizws"></script>
+<script>
+    // Function to initialize the map
+    function initMap() {
+        var geocoder = new google.maps.Geocoder();
+        var addresses = [
+            {% for topic in topics %}
+                "{{ topic.address }}",
+            {% endfor %}
+        ];
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 10, // Adjust the zoom level as needed
+            center: {lat: 0, lng: 0} // Default center
+        });
+
+        // Create markers for each address
+        for (var i = 0; i < addresses.length; i++) {
+            geocodeAddress(geocoder, map, addresses[i]);
+        }
+    }
+
+    // Function to geocode the address and add a marker
+    function geocodeAddress(geocoder, map, address) {
+        geocoder.geocode({'address': address}, function(results, status) {
+            if (status === 'OK') {
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+            } else {
+                console.error('Geocode was not successful for the following reason: ' + status);
+                // Handle error - show an alert or log to console
+            }
+        });
+    }
+
+    // Initialize the map
+    initMap();
+</script>
+
+
+
+{% endblock %}
